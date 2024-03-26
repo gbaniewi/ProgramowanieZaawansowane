@@ -243,3 +243,9 @@
     -ms-transform: rotate(45deg);
     transform: rotate(45deg);
   }
+
+  .rate-checkboxes {
+    display: flex;
+    flex-direction: column;
+    width: 200px;
+  }
