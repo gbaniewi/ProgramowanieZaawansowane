@@ -8,13 +8,7 @@ interface CurrencyData {
   id: number;
   name: string;
   rate: string;
-  rateBuy: string;
-  rateSell: string;
   date: string;
-}
-
-interface LastUpdateData {
-  last_update: string;
 }
 
 @Component({
@@ -28,19 +22,12 @@ export class ChartComponent implements OnInit, AfterViewInit {
   chart: any;
   period: number = 7;
   data: CurrencyData[] | null = null;
-  lastUpdate: string | null = null;
   isLoading: boolean = false;
-
-  // Add properties for each rate
-  showAverageRate: boolean = true;
-  showBuyRate: boolean = false;
-  showSellRate: boolean = false;
 
   constructor(private http: HttpClient) { }
 
   ngOnInit() {
     this.getData();
-    this.getLastUpdate();
   }
 
   ngAfterViewInit() {
@@ -48,7 +35,6 @@ export class ChartComponent implements OnInit, AfterViewInit {
 
   ngOnChanges() {
     this.getData();
-    this.getLastUpdate();
   }
 
   getData() {
@@ -62,17 +48,9 @@ export class ChartComponent implements OnInit, AfterViewInit {
     });
   }
 
-  getLastUpdate() {
-    this.http.get<LastUpdateData>(`http://127.0.0.1:8000/get_currency_update_date/${this.currency}/`).subscribe((data: LastUpdateData) => {
-      this.lastUpdate = data.last_update;
-    });
-  }
-
   createChart(data: CurrencyData[]) {
     const dates = data.map(item => item.date);
     const rates = data.map(item => Number(item.rate));
-    const buyRates = data.map(item => Number(item.rateBuy));
-    const sellRates = data.map(item => Number(item.rateSell));
 
     if (this.chart) {
       this.chart.destroy();
@@ -81,40 +59,18 @@ export class ChartComponent implements OnInit, AfterViewInit {
     console.log('Dates: ', dates);
     console.log('Rates: ', rates);
 
-    const datasets = [];
-    if (this.showAverageRate) {
-      datasets.push({
-        label: `${this.currency.toLocaleUpperCase()} Średni kurs`,
-        data: rates,
-        borderColor: '#3cba9f',
-        fill: true,
-        tension: 0.1
-      });
-    }
-    if (this.showBuyRate) {
-      datasets.push({
-        label: `${this.currency.toLocaleUpperCase()} Kurs kupna`,
-        data: buyRates,
-        borderColor: '#ff6384',
-        fill: true,
-        tension: 0.1
-      });
-    }
-    if (this.showSellRate) {
-      datasets.push({
-        label: `${this.currency.toLocaleUpperCase()} Kurs sprzedaży`,
-        data: sellRates,
-        borderColor: '#36a2eb',
-        fill: true,
-        tension: 0.1
-      });
-    }
 
     this.chart = new Chart(this.chartCanvas.nativeElement, {
       type: 'line',
       data: {
         labels: dates,
-        datasets: datasets
+        datasets: [{
+          label: this.currency.toLocaleUpperCase(),
+          data: rates,
+          borderColor: '#3cba9f',
+          fill: true,
+          tension: 0.1
+        }]
       },
       options: {
         scales: {
@@ -136,18 +92,10 @@ export class ChartComponent implements OnInit, AfterViewInit {
         this.createChart(data);
       }
     });
-    this.getLastUpdate();
   }
 
   updatePeriod(days: number) {
     this.period = days;
     this.getData();
-  }
-
-  // Add a method to update the chart when a checkbox is changed
-  updateChart() {
-    if (this.data && this.chartCanvas) {
-      this.createChart(this.data);
-    }
   }
 }

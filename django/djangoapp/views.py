@@ -1,61 +1,39 @@
 from django.http import JsonResponse
-from .models import Currency, LastUpdate
+from .models import Currency
 import requests
 from datetime import datetime, timedelta
 
+# Create your views here.
+
 def get_currency(request, currency, days):
+    # Ustaw liczbę dni na 4000
     total_days = 4000
     max_days_per_request = 90
-    tables = ['A', 'C']
+    table = 'A'  # dla walut obcych
 
-    last_update = LastUpdate.objects.get(currency__name=currency).last_update if LastUpdate.objects.filter(currency__name=currency).exists() else datetime.now() - timedelta(days=total_days)
-    if isinstance(last_update, datetime):
-        last_update = last_update.date()
+    # Pobierz dane z API NBP za ostatnie 4000 dni, uwzględniając limit 90 dni na zapytanie
+    for i in range(0, total_days, max_days_per_request):
+        remaining_days = min(max_days_per_request, total_days - i)
+        end_date = datetime.now() - timedelta(days=i)
+        start_date = end_date - timedelta(days=remaining_days)
+        response = requests.get(f'http://api.nbp.pl/api/exchangerates/rates/{table}/{currency}/{start_date.strftime("%Y-%m-%d")}/{end_date.strftime("%Y-%m-%d")}/')
+        data = response.json()
 
-    # Create a dictionary to store the data
-    data_dict = {}
+        # Zapisz dane do bazy danych
+        for rate in data['rates']:
+            # Pomijaj zapisywanie rekordów, dla których dane w bazie już są
+            if not Currency.objects.filter(name=currency, date=rate['effectiveDate']).exists():
+                Currency.objects.create(name=currency, rate=rate['mid'], date=rate['effectiveDate'])
 
-    for table in tables:
-        start_date = last_update
-        while (datetime.now().date() - start_date).days > 1:  # Fetch data from the day before the last update
-            end_date = start_date + timedelta(days=min((datetime.now().date() - start_date).days, max_days_per_request))
-            response = requests.get(f'http://api.nbp.pl/api/exchangerates/rates/{table}/{currency}/{start_date.strftime("%Y-%m-%d")}/{end_date.strftime("%Y-%m-%d")}/')
-            data = response.json()
-
-            for rate in data['rates']:
-                date = rate['effectiveDate']
-                if date not in data_dict:
-                    data_dict[date] = {'name': currency, 'date': date}
-                if table == 'A':
-                    data_dict[date]['rate'] = rate['mid']
-                elif table == 'C':
-                    data_dict[date]['rateBuy'] = rate['bid']
-                    data_dict[date]['rateSell'] = rate['ask']
-
-            start_date = end_date
-
-    # Insert the data into the database
-    for date, data in data_dict.items():
-        Currency.objects.update_or_create(name=currency, date=date, defaults=data)
-
-    if LastUpdate.objects.filter(currency__name=currency).exists():
-        LastUpdate.objects.filter(currency__name=currency).update(last_update=datetime.now())
-    else:
-        # Use filter() and first() instead of get()
-        LastUpdate.objects.create(currency=Currency.objects.filter(name=currency).first(), last_update=datetime.now())
-
+    # Sprawdź, czy dane są już w bazie danych
     currency_data = Currency.objects.filter(name=currency, date__gte=datetime.now()-timedelta(days=days)).order_by('date')
 
+    # Zwróć dane do frontendu
     return JsonResponse(list(currency_data.values()), safe=False)
 
 def get_currency_without_update(request, currency, days):
+    # Sprawdź, czy dane są już w bazie danych
     currency_data = Currency.objects.filter(name=currency, date__gte=datetime.now()-timedelta(days=days)).order_by('date')
 
+    # Zwróć dane do frontendu
     return JsonResponse(list(currency_data.values()), safe=False)
-
-def get_currency_update_date(request, currency):
-    # Get the last update date for the given currency
-    last_update = LastUpdate.objects.get(currency__name=currency).last_update if LastUpdate.objects.filter(currency__name=currency).exists() else None
-
-    # Return the last update date as a JSON response
-    return JsonResponse({'last_update': last_update})

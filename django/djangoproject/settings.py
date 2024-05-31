@@ -118,12 +118,10 @@ CORS_ORIGIN_WHITELIST = [
     'http://127.0.0.1:8000',
     'http://127.0.0.1:80',
     'http://127.0.0.1:1',
-    'http://127.0.0.1:9876',
     'http://localhost:4200',
     'http://localhost:8000',
     'http://localhost:80',
     'http://localhost:1',
-    'http://localhost:9876',
 ]
 
 CORS_ALLOW_HEADERS = ['*']

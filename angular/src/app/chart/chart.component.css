@@ -52,13 +52,6 @@
     box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
 }
 
-.last-update {
-    color: gray;
-    float: right;
-    padding: 10px;
-    padding-right: 30px;
-}
-
 .modal {
     display: block; 
     position: fixed; 
@@ -69,183 +62,18 @@
     height: 100%; 
     overflow: auto; 
     background-color: rgba(0,0,0,0.4); 
-}
+  }
 
-.modal-content {
+  .modal-content {
     margin: 15% auto; 
     padding: 20px;
     border: none;
     width: 80%; 
-}
+  }
 
-.modal-content img {
+  .modal-content img {
     background-color: rgba(0,0,0,0);
     display: block;
     margin-left: auto;
     margin-right: auto;
-}
-
-/* The container */
-.container {
-    display: block;
-    position: relative;
-    padding-left: 35px;
-    margin-bottom: 12px;
-    cursor: pointer;
-    font-size: 22px;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-  }
-  
-  /* Hide the browser's default checkbox */
-  .container input {
-    position: absolute;
-    opacity: 0;
-    cursor: pointer;
-    height: 0;
-    width: 0;
-  }
-  
-  /* Create a custom checkbox */
-  .checkmark-red {
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 25px;
-    width: 25px;
-    background-color: #eee;
-    border-radius: 5px;
-  }
-
-  .checkmark-green {
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 25px;
-    width: 25px;
-    background-color: #eee;
-    border-radius: 5px;
-  }
-
-  .checkmark-blue {
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 25px;
-    width: 25px;
-    background-color: #eee;
-    border-radius: 5px;
-  }
-  
-  /* On mouse-over, add a grey background color */
-  .container:hover input ~ .checkmark-red {
-    background-color: #ccc;
-  }
-
-  /* On mouse-over, add a grey background color */
-  .container:hover input ~ .checkmark-green {
-    background-color: #ccc;
-  }
-  
-  /* On mouse-over, add a grey background color */
-  .container:hover input ~ .checkmark-blue {
-    background-color: #ccc;
-  }  
-  
-  /* When the checkbox is checked, add a blue background */
-  .container input:checked ~ .checkmark-red {
-    background-color: #F66283;
-  }
-
-  /* When the checkbox is checked, add a blue background */
-  .container input:checked ~ .checkmark-green {
-    background-color: #53BA9F;
-  }  
-  
-  /* When the checkbox is checked, add a blue background */
-  .container input:checked ~ .checkmark-blue {
-    background-color: #4DA3EE;
-  }
-
-  /* Create the checkmark/indicator (hidden when not checked) */
-  .checkmark-red:after {
-    content: "";
-    position: absolute;
-    display: none;
-  }
-
-  /* Create the checkmark/indicator (hidden when not checked) */
-  .checkmark-green:after {
-    content: "";
-    position: absolute;
-    display: none;
-  }
-  
-  /* Create the checkmark/indicator (hidden when not checked) */
-  .checkmark-blue:after {
-    content: "";
-    position: absolute;
-    display: none;
-  }  
-  
-  /* Show the checkmark when checked */
-  .container input:checked ~ .checkmark-red:after {
-    display: block;
-  }
-
-  /* Show the checkmark when checked */
-  .container input:checked ~ .checkmark-green:after {
-    display: block;
-  }
-  
-  /* Show the checkmark when checked */
-  .container input:checked ~ .checkmark-blue:after {
-    display: block;
-  }  
-  
-  /* Style the checkmark/indicator */
-  .container .checkmark-red:after {
-    left: 9px;
-    top: 5px;
-    width: 5px;
-    height: 10px;
-    border: solid white;
-    border-width: 0 3px 3px 0;
-    -webkit-transform: rotate(45deg);
-    -ms-transform: rotate(45deg);
-    transform: rotate(45deg);
-  }
-
-  /* Style the checkmark/indicator */
-  .container .checkmark-green:after {
-    left: 9px;
-    top: 5px;
-    width: 5px;
-    height: 10px;
-    border: solid white;
-    border-width: 0 3px 3px 0;
-    -webkit-transform: rotate(45deg);
-    -ms-transform: rotate(45deg);
-    transform: rotate(45deg);
-  }
-
-  /* Style the checkmark/indicator */
-  .container .checkmark-blue:after {
-    left: 9px;
-    top: 5px;
-    width: 5px;
-    height: 10px;
-    border: solid white;
-    border-width: 0 3px 3px 0;
-    -webkit-transform: rotate(45deg);
-    -ms-transform: rotate(45deg);
-    transform: rotate(45deg);
-  }
-
-  .rate-checkboxes {
-    display: flex;
-    flex-direction: column;
-    width: 200px;
   }

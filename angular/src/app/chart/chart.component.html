@@ -1,5 +1,4 @@
 <div class="chart" *ngIf="currency">
-  <div class="last-update" *ngIf="lastUpdate">Ostatnia aktualizacja dla waluty {{currency.toUpperCase()}}: {{lastUpdate}}</div>
   <canvas #chartCanvas style ="height:100px"></canvas>
   <div class="period-buttons">
     <button id="periodButton" (click)="updatePeriod(3650)">10Y</button>
@@ -9,27 +8,12 @@
     <button id="periodButton" (click)="updatePeriod(30)">1M</button>
     <button id="periodButton" (click)="updatePeriod(7)">7D</button>
   </div>
-
   <button id="updateButton" (click)="updateData()">Pobierz najnowsze dane</button>
-  
-  <div class="rate-checkboxes">
-    <label class="container"> Kurs kupna
-      <input type="checkbox" [(ngModel)]="showBuyRate" (change)="updateChart()"> 
-      <span class="checkmark-red"></span>
-    </label>
-    <label class="container"> Kurs średni
-      <input type="checkbox" [(ngModel)]="showAverageRate" (change)="updateChart()"> 
-      <span class="checkmark-green"></span>
-    </label>
-    <label class="container"> Kurs sprzedaży
-      <input type="checkbox" [(ngModel)]="showSellRate" (change)="updateChart()"> 
-      <span class="checkmark-blue"></span>
-    </label>
-  </div>
+
 
   <div id="myModal" class="modal" *ngIf="isLoading">
     <div class="modal-content">
-      <img src="loading-gif.gif" width = "60" height="60" alt="Loading...">
+      <img src="https://media.tenor.com/On7kvXhzml4AAAAi/loading-gif.gif" width = "60" height="60" alt="Loading...">
     </div>
   </div>
 </div>

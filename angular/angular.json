@@ -35,9 +35,8 @@
             ],
             "tsConfig": "tsconfig.app.json",
             "assets": [
-              "src/icon.ico",
-              "src/assets",
-              "src/loading-gif.gif"
+              "src/favicon.ico",
+              "src/assets"
             ],
             "styles": [
               "src/styles.css"
